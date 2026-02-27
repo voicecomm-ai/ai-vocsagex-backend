@@ -1,0 +1,1 @@
+NOT_IMPLEMENTED_ERROR_MSG = "This feature is not included in the existing development iterations."

@@ -1,0 +1,6 @@
+services:
+  backend_base:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile-base
+    image: ai-voicesagex-backend-base

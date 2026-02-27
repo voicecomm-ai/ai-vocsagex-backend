@@ -1,0 +1,67 @@
+# User-defined
+test*.py
+tmp_file/
+bak_*
+test_*
+*.lock
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# VSCode / PyCharm / other IDE settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+MANIFEST
+
+# PyInstaller
+*.spec
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# MyPy / Pyre / other type checkers
+.mypy_cache/
+.pytype/
+
+# Logs
+*.log
+*.log.*
+
+# dotenv
+.env
+.env.*
+
+# MacOS / Linux / Windows system files
+.DS_Store
+Thumbs.db

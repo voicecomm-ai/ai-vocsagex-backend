@@ -1,0 +1,66 @@
+services:
+  backend_pyapi:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    image: ai-voicesagex-backend-pyapi
+    pull_policy: always
+    container_name: ${ENV:-dev}-ai-voicesagex-backend-pyapi
+    privileged: true
+    stop_grace_period: 60s
+    restart: always
+    network_mode: "host"
+    environment: 
+      ENV: ${ENV:-dev}
+    volumes:
+      - /data1:/data1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50088/health"]
+  
+  backend_sandbox:
+    image: ai-voicesagex-backend-sandbox
+    pull_policy: always
+    container_name: ${ENV:-dev}-ai-voicesagex-backend-sandbox
+    environment:
+      API_KEY: ${SANDBOX_API_KEY:-dify-sandbox}
+      GIN_MODE: ${SANDBOX_GIN_MODE:-release}
+      WORKER_TIMEOUT: ${SANDBOX_WORKER_TIMEOUT:-15}
+      ENABLE_NETWORK: ${SANDBOX_ENABLE_NETWORK:-true}
+      HTTP_PROXY: ${SANDBOX_HTTP_PROXY:-http://ssrf_proxy:3128}
+      HTTPS_PROXY: ${SANDBOX_HTTPS_PROXY:-http://ssrf_proxy:3128}
+      SANDBOX_PORT: ${SANDBOX_PORT:-8194}
+      PIP_MIRROR_URL: ${PIP_MIRROR_URL:-}
+    privileged: true
+    restart: always
+    ports:
+      - "${EXPOSE_SANDBOX_PORT:-8194}:${SANDBOX_PORT:-8194}"
+    networks:
+      - custom_net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8194/health" ]
+  
+  backend_ssrf_proxy:
+    image: ai-voicesagex-backend-ssrf-proxy
+    pull_policy: always
+    container_name: ${ENV:-dev}-ai-voicesagex-backend-ssrf-proxy
+    environment:
+      HTTP_PORT: ${SSRF_HTTP_PORT:-3128}
+      COREDUMP_DIR: ${SSRF_COREDUMP_DIR:-/var/spool/squid}
+      REVERSE_PROXY_PORT: ${SSRF_REVERSE_PROXY_PORT:-8194}
+      SANDBOX_HOST: ${SSRF_SANDBOX_HOST:-sandbox}
+      SANDBOX_PORT: ${SANDBOX_PORT:-8194}
+    privileged: true
+    stop_grace_period: 1s
+    restart: always
+    ports:
+      - "${EXPOSE_SSRF_PROXY_PORT:-3128}:${SSRF_HTTP_PORT:-3128}"
+    networks:
+      - custom_net
+
+networks:
+  custom_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.249.0.0/16

@@ -1,0 +1,39 @@
+{
+    "server": {
+        "host": "0.0.0.0",
+        "port": 50088,
+        "default_executor_threads": 32,
+        "api_executor_threads": 32,
+        "embedding_batch_size": 8
+    },
+    "component": {
+        "sandbox": {
+            "url": "http://sandbox-server-ai-qa-8194:8194/v1/sandbox/run",
+            "headers": {
+                "X-Api-Key": "dify-sandbox"
+            },
+            "timeout": 60
+        }
+    },
+    "dependent_info": {
+        "database": {
+            "type": "postgres",
+            "host": "pgsql-server-ai-qa-5432",
+            "port": 5432,
+            "user": "postgres",
+            "password": "voicecomm@123",
+            "database": "vc_ai_voicesagex",
+            "min_size": 1,
+            "max_size": 10
+        },
+        "knowledge_base": {
+            "file_url": "https://qavoicesagex.voicecomm.cn:7772/file",
+            "document_path_prefix": "/data1/voicesagex-console/upload/",
+            "pic_save_path_prefix": "/data1/voicesagex-console/upload/knowledge-base/images/",
+            "pic_url_prefix": "/voicesagex-console/upload/knowledge-base/images/"
+        },
+        "node": {
+            "document_extract_path_prefix": "/data1/voicesagex-console/upload/node_file/"
+        }
+    }
+}

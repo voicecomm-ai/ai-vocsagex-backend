@@ -1,0 +1,31 @@
+FROM python:3.11.12
+
+WORKDIR /app
+
+# COPY
+COPY ./requirements.txt /app
+
+# RUN
+RUN mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian bookworm main contrib non-free non-free-firmware" > /etc/apt/sources.list && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian bookworm-updates main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
+    echo "deb http://mirrors.tuna.tsinghua.edu.cn/debian-security bookworm-security main contrib non-free non-free-firmware" >> /etc/apt/sources.list && \
+    apt update && \
+    apt install -y vim && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN touch ~/.vimrc && \
+    grep -qxF 'nnoremap v <nop>' ~/.vimrc || echo 'nnoremap v <nop>' >> ~/.vimrc && \
+    grep -qxF 'nnoremap V <nop>' ~/.vimrc || echo 'nnoremap V <nop>' >> ~/.vimrc && \
+    grep -qxF 'nnoremap <C-v> <nop>' ~/.vimrc || echo 'nnoremap <C-v> <nop>' >> ~/.vimrc
+
+# RUN
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip install --upgrade pip --no-cache-dir && \
+    pip install --no-cache-dir -r requirements.txt
+
+
+# ENV
+ENV LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
